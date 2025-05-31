@@ -21,6 +21,14 @@ services:
       - "./acme.json:/acme.json"
     networks:
       - webnet
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.startdevops.site`)"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.tls.certresolver=myresolver"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=admin:$$apr1$$mS8ICJLr$$fDuZhT8DQ9ZlUeQEKXL5C."
   web:
     build: .
     labels:
